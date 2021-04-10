@@ -1,0 +1,37 @@
+name: 'C++ CI'
+
+on:
+	push:
+		branches:
+			-main
+jobs:
+	build:
+		runs-on: ubuntu-latest
+		steps:
+			-users : actions/checkout@v2
+			 with:
+				submodules: true
+			-run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
+			-run: cmake
+			-run: make
+			-run: ./hello
+			-name: Create Release 
+			  id: create_release
+			  uses: actions/create-release@v1
+			 evn:
+				GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+			 with:
+				tag_name: ${{ github.run_number }}
+				release_name: Release ${{ github.run_number }}
+				draft: false
+				prerelease: false
+			- name: Upload Release Assert
+			  id: upload-release-assert
+			  uses: actions/upload-release-asset@v1
+			 evn:
+			     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+			 with:
+			   upload_url: ${{ steps.create_release.outputs.upload_url }}
+			   assert_path: ./hello
+			   assert_name: hello
+			   assert_content_type: application/vnd.debian.binary-package
