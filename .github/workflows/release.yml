@@ -3,19 +3,20 @@ name: 'C++ CI'
 on:
 	push:
 		branches:
-			-main
+			- main
+
 jobs:
 	build:
 		runs-on: ubuntu-latest
 		steps:
-			-users : actions/checkout@v2
+			- users : actions/checkout@v2
 			 with:
 				submodules: true
-			-run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
-			-run: cmake
-			-run: make
-			-run: ./hello
-			-name: Create Release 
+			- run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
+			- run: cmake
+			- run: make
+			- run: ./hello
+			- name: Create Release 
 			  id: create_release
 			  uses: actions/create-release@v1
 			 evn:
